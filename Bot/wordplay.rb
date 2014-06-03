@@ -1,3 +1,14 @@
+class String
+
+	def sentences
+		gsub(/\n|\r/, ' ').split(/\.\s*/)
+	end
+
+	def words
+		scan(/\w[\w\'\-]*/)
+	end
+end
+
 class WordPlay
 
 	def self.switch_pronouns(text)
@@ -20,17 +31,15 @@ class WordPlay
 			end
 		end.sub(/^me\b/i, 'i')
 	end
-				
+	
+	def self.best_sentence(sentences, desired_words)
+		ranked_sentences = sentences.sort_by do |s|
+			s.words.length - (s.downcase - desired_words).length
+		end
+
+		ranked_sentences.last
+	end
+
 
 end
 
-class String
-
-	def sentences
-		gsub(/\n|\r/, ' ').split(/\.\s*/)
-	end
-
-	def words
-		scan(/\w[\w\'\-]*/)
-	end
-end

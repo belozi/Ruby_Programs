@@ -34,7 +34,7 @@ class WordPlay
 	
 	def self.best_sentence(sentences, desired_words)
 		ranked_sentences = sentences.sort_by do |s|
-			s.words.length - (s.downcase - desired_words).length
+			s.words.length - (s.downcase.words - desired_words).length
 		end
 
 		ranked_sentences.last

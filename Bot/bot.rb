@@ -1,5 +1,5 @@
 require 'yaml'
-require 'wordplay'
+require './wordplay'
 
 class Bot
 	attr_reader :name
@@ -24,11 +24,16 @@ class Bot
 		responses[rand(responses.length)]
 	end
 
-	def farwell
+	def farewell
 		random_response :farewell
 	end
 
 	private
+
+	def random_response(key)
+		random_index = rand(@data[:responses][key].length)
+		@data[:responses][key][random_index].gsub(/\[name\]/, @name)
+	end
 
 	def preprocess(input)
 		perform_substitutions input
@@ -70,6 +75,10 @@ class Bot
 						# the pronouns switched
 						phrase.sub('*', WordPlay.switch_pronouns(matching_section))
 					end
+				else
+					# No placeholders? Just add phrases to the array
+					responses << @data[:responses][pattern]
+				end
 			end
 		end
 
@@ -78,11 +87,6 @@ class Bot
 
 		# Flatten the blocks of responses to a flat array
 		responses.flatten
-	end
-
-	def random_response(key)
-		random_index = rand(@data[:responses][key].length)
-		@data[:responses][key][random_index].gsub(/\[name\]/, @name)
 	end
 
 end
